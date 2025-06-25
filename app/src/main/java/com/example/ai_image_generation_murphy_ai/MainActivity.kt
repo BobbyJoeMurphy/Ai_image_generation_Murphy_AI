@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Ai_image_generation_Murphy_AITheme {
                 val navController = rememberNavController()
-                AppNavHost(navController = navController, modifier = Modifier.fillMaxSize())
+                AppNavHost(navController = navController)
             }
         }
     }

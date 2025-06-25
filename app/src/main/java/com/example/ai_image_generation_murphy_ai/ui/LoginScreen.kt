@@ -14,8 +14,7 @@ import com.example.ai_image_generation_murphy_ai.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    modifier: Modifier,
-    onSkipLogin: (() -> Unit)? = null // New optional callback
+    onSkipLogin: (() -> Unit)? = null
 ) {
     val email = viewModel.email
     val password = viewModel.password
@@ -75,8 +74,6 @@ fun LoginScreen(
             }
             Text("Login")
         }
-
-        // New Skip Login Button
         onSkipLogin?.let {
             Spacer(modifier = Modifier.height(8.dp))
             TextButton(
