@@ -12,7 +12,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.ai_image_generation_murphy_ai.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), modifier: Modifier) {
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    modifier: Modifier,
+    onSkipLogin: (() -> Unit)? = null // New optional callback
+) {
     val email = viewModel.email
     val password = viewModel.password
     val isLoading = viewModel.isLoading
@@ -70,6 +74,17 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), modifier: Modifier)
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text("Login")
+        }
+
+        // New Skip Login Button
+        onSkipLogin?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            TextButton(
+                onClick = it,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Skip Login")
+            }
         }
     }
 }
