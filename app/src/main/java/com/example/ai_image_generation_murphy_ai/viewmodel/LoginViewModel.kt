@@ -1,11 +1,11 @@
-package com.example.ai_image_generation_murphy_ai.ui.login
+package com.example.ai_image_generation_murphy_ai.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ai_image_generation_murphy_ai.data.repository.UserRepository
+import com.example.ai_image_generation_murphy_ai.data.repository.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

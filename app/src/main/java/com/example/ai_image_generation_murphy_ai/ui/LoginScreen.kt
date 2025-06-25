@@ -9,7 +9,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.ai_image_generation_murphy_ai.ui.login.LoginViewModel
+import com.example.ai_image_generation_murphy_ai.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), modifier: Modifier) {

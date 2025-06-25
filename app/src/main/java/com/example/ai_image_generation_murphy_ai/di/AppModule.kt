@@ -1,7 +1,7 @@
 package com.example.ai_image_generation_murphy_ai.di
 
-import com.example.ai_image_generation_murphy_ai.data.api.ApiService
-import com.example.ai_image_generation_murphy_ai.data.repository.ImageRepository
+import com.example.ai_image_generation_murphy_ai.data.repository.api.ApiService
+import com.example.ai_image_generation_murphy_ai.data.repository.repository.ImageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

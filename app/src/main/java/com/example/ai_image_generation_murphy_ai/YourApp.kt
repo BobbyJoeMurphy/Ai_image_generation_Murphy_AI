@@ -4,4 +4,6 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class YourApp : Application()
+class YourApp : Application() {
+    // Any setup here
+}
