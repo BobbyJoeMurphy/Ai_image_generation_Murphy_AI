@@ -67,6 +67,8 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt)
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime.android)
     ksp(libs.hilt.compiler)
 
     // Testing
@@ -76,6 +78,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    ksp(libs.androidx.room.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

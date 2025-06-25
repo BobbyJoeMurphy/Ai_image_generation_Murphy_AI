@@ -12,7 +12,7 @@ fun BottomBar(navController: NavController, onGenerateClick: () -> Unit) {
         BottomNavItem("home", "Home", Icons.Default.Home),
         BottomNavItem("discover", "Discover", Icons.Default.Search),
         BottomNavItem("generate", "Generate", Icons.Default.Add),
-        BottomNavItem("card", "Card", Icons.Default.Add),
+        BottomNavItem("card", "Card", Icons.Default.AccountBox),
         BottomNavItem("settings", "Settings", Icons.Default.Settings)
     )
 
@@ -21,23 +21,20 @@ fun BottomBar(navController: NavController, onGenerateClick: () -> Unit) {
 
     NavigationBar {
         items.forEach { item ->
-            if (item.route == "generate") {
-                // Skip generate here, we handle it with FAB button
-            } else {
-                NavigationBarItem(
-                    icon = { Icon(item.icon, contentDescription = item.label) },
-                    label = { Text(item.label) },
-                    selected = currentRoute == item.route,
-                    onClick = {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
-                        }
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.startDestinationId)
+                        launchSingleTop = true
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
+
 
 data class BottomNavItem(val route: String, val label: String, val icon: ImageVector)
