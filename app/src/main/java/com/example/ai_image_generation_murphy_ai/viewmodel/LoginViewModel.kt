@@ -29,20 +29,15 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
-            try {
-                val success = repository.login(email, password)
-                if (!success) {
-                    errorMessage = "Invalid credentials"
-                }
-            } catch (e: Exception) {
-                errorMessage = "Login failed: ${e.message}"
-            } finally {
+
+            repository.loginUser(email, password) { success, error ->
                 isLoading = false
+                if (!success) {
+                    errorMessage = error ?: "Login failed"
+                }
             }
         }
     }
 }
 
-private operator fun <T> Result<T>.not(): T {
-    TODO("Not yet implemented")
-}
+

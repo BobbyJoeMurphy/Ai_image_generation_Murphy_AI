@@ -4,6 +4,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
+    kotlin("kapt")
+
+
 }
 hilt {
     enableAggregatingTask = false
@@ -69,7 +74,12 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.runtime.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    kapt(libs.hilt.compiler)
+    implementation(libs.firebase.storage.ktx)
 
     // Testing
     testImplementation(libs.junit)
@@ -78,7 +88,6 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    ksp(libs.androidx.room.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

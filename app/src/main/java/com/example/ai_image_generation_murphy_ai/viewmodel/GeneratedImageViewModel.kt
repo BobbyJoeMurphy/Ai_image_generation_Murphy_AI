@@ -32,6 +32,7 @@ class GeneratedImageViewModel @Inject constructor(
     val allImages: StateFlow<List<GeneratedImageEntity>> = dao.getAllImages()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+
     fun saveImage(prompt: String, imageUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
