@@ -43,7 +43,7 @@ fun GenerateScreen(viewModel: GeneratedImageViewModel = hiltViewModel()) {
             coroutineScope.launch {
                 try {
                     val response = RetrofitInstance.api.generateImage(
-                        auth = "redacted fk u",
+                        auth =  "",
                         request = ImageGenerationRequest(prompt = prompt)
                     )
                     val url = response.data.firstOrNull()?.url

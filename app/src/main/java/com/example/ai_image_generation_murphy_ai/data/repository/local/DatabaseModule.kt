@@ -20,7 +20,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "generated_images_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

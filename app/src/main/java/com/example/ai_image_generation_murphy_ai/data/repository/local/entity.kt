@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class GeneratedImageEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val prompt: String,
-    val imageUrl: String,
+    val localPath: String,
     val timestamp: Long = System.currentTimeMillis()
 )

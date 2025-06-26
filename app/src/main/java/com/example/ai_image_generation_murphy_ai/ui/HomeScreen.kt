@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.ai_image_generation_murphy_ai.data.repository.repository.GeneratedImageStore
-import com.example.ai_image_generation_murphy_ai.data.repository.repository.GeneratedImageStore.imageList
 import com.example.ai_image_generation_murphy_ai.viewmodel.GeneratedImageViewModel
 
 @Composable
@@ -28,7 +26,6 @@ fun HomeScreen(
     viewModel: GeneratedImageViewModel = hiltViewModel()
 ) {
     val images by viewModel.allImages.collectAsState()
-
     var currentImageIndex by remember { mutableStateOf<Int?>(null) }
 
     Surface(
@@ -43,7 +40,7 @@ fun HomeScreen(
             ) {
                 itemsIndexed(images) { index, image ->
                     AsyncImage(
-                        model = image.imageUrl,
+                        model = image.localPath,
                         contentDescription = "Generated image",
                         modifier = Modifier
                             .padding(8.dp)
@@ -55,8 +52,14 @@ fun HomeScreen(
                 }
             }
 
-            // Fullscreen overlay
-            currentImageIndex?.let { index ->
+            // Safe fullscreen overlay
+            if (
+                images.isNotEmpty() &&
+                currentImageIndex != null &&
+                currentImageIndex in images.indices
+            ) {
+                val image = images[currentImageIndex!!]
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -77,24 +80,23 @@ fun HomeScreen(
                                 .padding(16.dp)
                         ) {
                             AsyncImage(
-                                model = imageList[index].imageUrl,
+                                model = image.localPath,
                                 contentDescription = "Full image",
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(1f)
                             )
                             Text(
-                                text = imageList[index].prompt,
+                                text = image.prompt,
                                 color = Color.White,
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(top = 8.dp)
                             )
                         }
 
-                        // Left nav
-                        if (index > 0) {
+                        if (currentImageIndex!! > 0) {
                             IconButton(
-                                onClick = { currentImageIndex = index - 1 },
+                                onClick = { currentImageIndex = currentImageIndex!! - 1 },
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .padding(start = 16.dp)
@@ -107,10 +109,9 @@ fun HomeScreen(
                             }
                         }
 
-                        // Right nav
-                        if (index < imageList.size - 1) {
+                        if (currentImageIndex!! < images.size - 1) {
                             IconButton(
-                                onClick = { currentImageIndex = index + 1 },
+                                onClick = { currentImageIndex = currentImageIndex!! + 1 },
                                 modifier = Modifier
                                     .align(Alignment.CenterEnd)
                                     .padding(end = 16.dp)
@@ -123,7 +124,6 @@ fun HomeScreen(
                             }
                         }
 
-                        // Close button
                         IconButton(
                             onClick = { currentImageIndex = null },
                             modifier = Modifier
