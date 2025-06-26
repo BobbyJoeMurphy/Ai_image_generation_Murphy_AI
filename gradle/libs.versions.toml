@@ -26,7 +26,8 @@ firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseStorage = "20.3.0"
 firebaseAuthKtx = "23.2.1"
-firebaseFirestoreKtx = "25.1.4" # You can move this near the other Firebase versions
+firebaseFirestoreKtx = "25.1.4"
+playServicesAdsApi = "24.4.0" # You can move this near the other Firebase versions
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +66,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorage" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+play-services-ads-api = { group = "com.google.android.gms", name = "play-services-ads-api", version.ref = "playServicesAdsApi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

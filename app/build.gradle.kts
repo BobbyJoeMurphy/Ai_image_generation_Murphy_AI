@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging)
     implementation(libs.glide)
+    implementation(libs.play.services.ads.api)
     kapt(libs.compiler)
     kapt(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
@@ -82,6 +83,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     kapt(libs.hilt.compiler)
     implementation(libs.firebase.storage.ktx)
+    implementation("com.google.android.gms:play-services-ads:24.4.0")
 
     // Testing
     testImplementation(libs.junit)

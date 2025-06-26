@@ -11,6 +11,7 @@ import com.example.ai_image_generation_murphy_ai.data.repository.local.Generated
 import com.example.ai_image_generation_murphy_ai.data.repository.local.GeneratedImageEntity
 import com.example.ai_image_generation_murphy_ai.data.repository.model.GeneratedImage
 import com.example.ai_image_generation_murphy_ai.data.repository.repository.ImageRepository
+import com.example.ai_image_generation_murphy_ai.rewarded.UserRewardRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,6 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GeneratedImageViewModel @Inject constructor(
     private val dao: GeneratedImageDao,
+    private val rewardRepository: UserRewardRepository,
     private val imageRepository: ImageRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {

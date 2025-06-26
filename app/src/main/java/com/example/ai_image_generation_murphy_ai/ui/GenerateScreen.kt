@@ -1,6 +1,8 @@
 package com.example.ai_image_generation_murphy_ai.ui
 
 import android.graphics.Bitmap
+import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.ai_image_generation_murphy_ai.data.repository.api.RetrofitInstance
 import com.example.ai_image_generation_murphy_ai.data.repository.model.ImageGenerationRequest
 import com.example.ai_image_generation_murphy_ai.repository.ImageViewModel
+import com.example.ai_image_generation_murphy_ai.rewarded.RewardedAdManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,8 +29,45 @@ fun GenerateScreen(viewModel: ImageViewModel = hiltViewModel()) {
     var isLoading by remember { mutableStateOf(false) }
     var imageUrl by remember { mutableStateOf<String?>(null) }
     var isPublic by remember { mutableStateOf(true) }
+
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val activity = LocalActivity.current ?: error("Activity not found")
+
+    LaunchedEffect(Unit) {
+        RewardedAdManager.loadAd(context)
+        viewModel.checkDailyReset()
+    }
+
+    fun generateImage() {
+        isLoading = true
+        coroutineScope.launch {
+            try {
+                val response = RetrofitInstance.api.generateImage(
+                    auth = "Fk u",
+                    request = ImageGenerationRequest(prompt = prompt)
+                )
+                val url = response.data.firstOrNull()?.url
+                if (url != null) {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Glide.with(context).asBitmap().load(url).submit().get()
+                    }
+
+                    viewModel.uploadAndSaveImage(bitmap, prompt, isPublic) { success, error ->
+                        if (success) println("Image uploaded and saved successfully!")
+                        else println("Upload failed: $error")
+                    }
+
+                    imageUrl = url
+                }
+            } catch (e: Exception) {
+                imageUrl = null
+                prompt = "Error: ${e.localizedMessage}"
+            } finally {
+                isLoading = false
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -37,7 +77,6 @@ fun GenerateScreen(viewModel: ImageViewModel = hiltViewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Generate an Image", style = MaterialTheme.typography.headlineSmall)
-
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
@@ -71,38 +110,22 @@ fun GenerateScreen(viewModel: ImageViewModel = hiltViewModel()) {
 
         Button(
             onClick = {
-                isLoading = true
-                coroutineScope.launch {
-                    try {
-                        val response = RetrofitInstance.api.generateImage(
-                            auth = "Fk u",
-                            request = ImageGenerationRequest(prompt = prompt)
+                if (viewModel.hasCredits()) {
+                    viewModel.consumeCredit()
+                    generateImage()
+                } else {
+                    if (RewardedAdManager.isAdReady()) {
+                        RewardedAdManager.showAd(
+                            activity = activity,
+                            onUserEarnedReward = {
+                                viewModel.earnCreditFromAd()
+                            },
+                            onAdDismissed = {
+                                Toast.makeText(context, "Ad skipped. No image generated.", Toast.LENGTH_SHORT).show()
+                            }
                         )
-                        val url = response.data.firstOrNull()?.url
-                        if (url != null) {
-                            val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                                Glide.with(context)
-                                    .asBitmap()
-                                    .load(url)
-                                    .submit()
-                                    .get()
-                            }
-
-                            viewModel.uploadAndSaveImage(bitmap, prompt, isPublic) { success, error ->
-                                if (success) {
-                                    println("Image uploaded and saved successfully!")
-                                } else {
-                                    println("Upload failed: $error")
-                                }
-                            }
-
-                            imageUrl = url
-                        }
-                    } catch (e: Exception) {
-                        imageUrl = null
-                        prompt = "Error: ${e.localizedMessage}"
-                    } finally {
-                        isLoading = false
+                    } else {
+                        Toast.makeText(context, "Ad not ready yet. Please try again.", Toast.LENGTH_SHORT).show()
                     }
                 }
             },
@@ -114,7 +137,7 @@ fun GenerateScreen(viewModel: ImageViewModel = hiltViewModel()) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(20.dp))
             } else {
-                Text("Generate")
+                Text(text = if (viewModel.hasCredits()) "Generate" else "Watch Ad to Generate")
             }
         }
     }
