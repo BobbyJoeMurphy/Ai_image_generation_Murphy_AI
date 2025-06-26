@@ -40,7 +40,7 @@ fun HomeScreen(
             ) {
                 itemsIndexed(images) { index, image ->
                     AsyncImage(
-                        model = image.localPath,
+                        model = image.imageUrl,
                         contentDescription = "Generated image",
                         modifier = Modifier
                             .padding(8.dp)
@@ -52,7 +52,6 @@ fun HomeScreen(
                 }
             }
 
-            // Safe fullscreen overlay
             if (
                 images.isNotEmpty() &&
                 currentImageIndex != null &&
@@ -80,7 +79,7 @@ fun HomeScreen(
                                 .padding(16.dp)
                         ) {
                             AsyncImage(
-                                model = image.localPath,
+                                model = image.imageUrl,
                                 contentDescription = "Full image",
                                 modifier = Modifier
                                     .fillMaxWidth()

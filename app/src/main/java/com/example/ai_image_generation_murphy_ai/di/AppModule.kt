@@ -21,7 +21,7 @@ object AppModule {
     @Singleton
     fun provideApiService(): ApiService {
         return Retrofit.Builder()
-            .baseUrl("https://your-api.com/")
+            .baseUrl("https://your-api.com/") // Replace with your real base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
@@ -33,8 +33,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(apiService: ApiService): ImageRepository {
-        return ImageRepository(apiService)
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideImageRepository(
+        apiService: ApiService,
+        firestore: FirebaseFirestore
+    ): ImageRepository {
+        return ImageRepository(apiService, firestore)
     }
 
     @Provides
@@ -45,11 +52,4 @@ object AppModule {
     ): UserRepository {
         return UserRepository(firebaseAuth, firestore)
     }
-
-    @Provides
-    @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
-
 }

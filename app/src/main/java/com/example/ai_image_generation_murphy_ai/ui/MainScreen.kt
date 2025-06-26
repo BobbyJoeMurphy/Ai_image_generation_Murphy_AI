@@ -1,6 +1,7 @@
 package com.example.ai_image_generation_murphy_ai.ui
 
 import BottomBar
+import DiscoverScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -11,8 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun MainScreen(onLogout: () -> Unit) {
-    val navController = rememberNavController()
+fun MainScreen(
+    navController: androidx.navigation.NavController,
+    currentRoute: String,
+    onLogout: () -> Unit
+) {
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -22,32 +26,19 @@ fun MainScreen(onLogout: () -> Unit) {
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("home") { HomeScreen() }
-            composable("discover") { DiscoverScreen() }
-            composable("generate") { GenerateScreen() }
-            composable("card") { CardScreen() }
-            composable("settings") {
-                SettingsScreen(
-                    onLogout = onLogout
-                )
+        androidx.compose.foundation.layout.Box(modifier = Modifier.padding(innerPadding)) {
+            when (currentRoute) {
+                "home" -> HomeScreen()
+                "discover" -> DiscoverScreen()
+                "generate" -> GenerateScreen()
+                "card" -> CardScreen()
+                "settings" -> SettingsScreen(onLogout = onLogout)
             }
         }
     }
 }
 
-
 @Composable
 fun CardScreen() {
-    TODO("Not yet implemented")
-}
-
-
-@Composable
-fun DiscoverScreen() {
     TODO("Not yet implemented")
 }

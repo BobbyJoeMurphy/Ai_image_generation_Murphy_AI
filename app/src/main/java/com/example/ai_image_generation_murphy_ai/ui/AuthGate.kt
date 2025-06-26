@@ -18,7 +18,7 @@ fun AuthGate(
 
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn) {
-            navController.navigate("main") {
+            navController.navigate("home") {
                 popUpTo("auth") { inclusive = true }
             }
         }

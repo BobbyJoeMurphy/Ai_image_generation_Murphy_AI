@@ -9,36 +9,64 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ai_image_generation_murphy_ai.data.repository.local.GeneratedImageDao
 import com.example.ai_image_generation_murphy_ai.data.repository.local.GeneratedImageEntity
+import com.example.ai_image_generation_murphy_ai.data.repository.model.GeneratedImage
+import com.example.ai_image_generation_murphy_ai.data.repository.repository.ImageRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.File
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class GeneratedImageViewModel @Inject constructor(
     private val dao: GeneratedImageDao,
+    private val imageRepository: ImageRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    val allImages: StateFlow<List<GeneratedImageEntity>> = dao.getAllImages()
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    private val _allImages = MutableStateFlow<List<GeneratedImage>>(emptyList())
+    val allImages: StateFlow<List<GeneratedImage>> = _allImages
 
+    init {
+        fetchImagesFromFirestore()
+    }
 
-    fun saveImage(prompt: String, imageUrl: String) {
+    fun fetchImagesFromFirestore() {
+        viewModelScope.launch {
+            val images = imageRepository.getUserImages()
+            _allImages.value = images
+        }
+    }
+
+    fun saveImage(prompt: String, imageUrl: String, isPublic: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val fileName = "img_${System.currentTimeMillis()}.png"
                 val savedPath = saveImageToGallery(imageUrl, fileName)
+
                 dao.insert(GeneratedImageEntity(prompt = prompt, localPath = savedPath))
+
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@launch
+                val image = GeneratedImage(
+                    id = UUID.randomUUID().toString(),
+                    prompt = prompt,
+                    imageUrl = imageUrl,
+                    isPublic = isPublic,
+                    userId = userId
+                )
+                imageRepository.saveImageToFirestore(image) { success, error ->
+                    if (!success) {
+                        Log.e("GeneratedImageViewModel", "Firestore error: $error")
+                    }
+                }
+
             } catch (e: Exception) {
                 Log.e("GeneratedImageViewModel", "Failed to save image: ${e.message}")
             }
