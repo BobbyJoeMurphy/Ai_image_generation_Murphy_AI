@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "67578276514",
+    "project_id": "murphy-ai-generation",
+    "storage_bucket": "murphy-ai-generation.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67578276514:android:340167e10f88bd3d1b05fb",
+        "android_client_info": {
+          "package_name": "com.example.ai_image_generation_murphy_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr_Z7zmwcsgybDiFJkJJcpzcwzNi3Nuh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
