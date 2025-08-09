@@ -95,6 +95,12 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // CameraX
+    implementation("androidx.camera:camera-camera2:1.3.4")
+    implementation("androidx.camera:camera-lifecycle:1.3.4")
+    implementation("androidx.camera:camera-view:1.3.4")
+// Optional niceties (portrait/bokeh/HDR on some devices)
+    implementation("androidx.camera:camera-extensions:1.3.4")
 }
 configurations.all {
     resolutionStrategy {
